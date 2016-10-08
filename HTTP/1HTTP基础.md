@@ -4,9 +4,9 @@
     * HTML 格式的文本文档由 text/html 类型来标记。
     * 普通的 ASCII 文本文档由 text/plain 类型来标记。
     * JPEG 格式的图片为 image/jpeg 类型。
-    *  GIF 格式的图片为 image/gif 类型。
-    *  Apple 的 QuickTime 电影为 video/quicktime 类型。
-    * 微软的 PowerPoint 演示文件为 application/vnd.ms-powerpoint 类型。
+    * GIF 格式的图片为 image/gif 类型。
+    * Apple 的 QuickTime 电影为 video/quicktime 类型。
+    *  微软的 PowerPoint 演示文件为 application/vnd.ms-powerpoint 类型。
     
 &emsp;&emsp;2每个http请求都有一个方法，这个方法告诉服务器执行什么动作。有如下五种：</br>
     * GET 从服务器向客户端发送命名资源。
