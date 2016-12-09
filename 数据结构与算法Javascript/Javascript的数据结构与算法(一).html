@@ -1,0 +1,155 @@
+/*
+* @Author: huangchengdu
+* @Date:   2016-12-09 13:03:37
+* @Last Modified by:   huangchengdu
+* @Last Modified time: 2016-12-09 13:04:28
+*/
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>javascript的数据结构与算法(一)</title>
+</head>
+<body>
+	<script type="text/javascript">
+	//===================1.2数组合并=============================
+	var zero = 0;
+    var positiveNumbers = [1,2,3];
+    var negativeNumbers = [-1,-2,-3];
+    var numbers = negativeNumbers.concat(zero,positiveNumbers);
+    console.log(numbers);//输出结果： [-1, -2, -3, 0, 1, 2, 3]
+
+
+    //===================1.3迭代器函数=============================
+	var isEven = function(x){
+	  return (x%2 == 0)?true:false;
+	}
+	var numbers = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
+	//every方法会迭代数组中的每个元素,直到返回false。
+	var result = numbers.every(isEven);
+	console.log(result);//false
+	//some方法会迭代数组的每个元 素,直到函数返回true.
+	result = numbers.some(isEven);
+	console.log(result);//true
+	//forEach对每一项运行给定的函数，没有返回值
+	numbers.forEach(function(item,index){
+	  console.log(item%2 == 0);
+	});
+	//map会迭代数组中的每个值，并且返回迭代结果
+	var myMap = numbers.map(isEven);
+	console.log(myMap);// [false, true, false, true, false, true, false, true, false, true, false, true, false, true, false]
+	//filter方法返回的新数组由使函数返回true的元素组成
+	var myFilter = numbers.filter(isEven);
+	console.log(myFilter);// [2, 4, 6, 8, 10, 12, 14]
+	/*reduce方法接收一个函数作为参数,这个函数有四个参数: previousValue、currentValue、index和array。这个函数会返回一个将被叠加到累加器的 值,reduce方法停止执行后会返回这个累加器。如果要对一个数组中的所有元素求和,这就很 有用*/
+	var myReduce = numbers.reduce(function(previous,current,index){
+	  return previous + "" + current;
+	});
+
+
+    //===================1.4排序=============================
+    var numbers = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
+    numbers.reverse();//[15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+    function compare(a,b){
+      if(a > b){
+        return 1;
+      }
+      if(a < b){
+        return -1;
+      }
+      return 0;
+    }
+    //sort函数使用
+    [1, 10, 11, 12, 13, 14, 15, 2, 3, 4, 5, 6, 7, 8, 9].sort(compare);
+
+    var friends = [{
+      name:'huang',
+      age:30
+    },{
+      name:'chengdu',
+      age:27
+    },{
+      name:'du',
+      age:31
+    }];
+    function comparePerson(a,b){
+      if(a.age > b.age){
+        return 1;
+      }
+      if(a.age < b.age){
+        return -1;
+      }
+      return 0;
+    }
+    console.log(friends.sort(comparePerson));// [Object { name="chengdu",  age=27}, Object { name="huang",  age=30}, Object { name="du",  age=31}]
+    //搜索
+    numbers.push(10);
+    console.log(numbers.indexOf(10));//5
+    console.log(numbers.lastIndexOf(10));//15
+    var numbersString = numbers.join('-');
+    console.log(numbersString);//15-14-13-12-11-10-9-8-7-6-5-4-3-2-1-10
+
+
+    //=====================================2.1栈的创建==============================
+    function Stack(){
+      this.items = [];
+    }
+    Stack.prototype = {
+      constructor:Stack,
+      push:function(element){
+        this.items.push(element);
+      },
+      pop:function(){
+        return this.items.pop();
+      },
+      peek:function(){
+        return this.items[this.items.length - 1];
+      },
+      isEmpty:function(){
+        return this.items.length == 0;
+      },
+      clear:function(){
+        this.items = [];
+      },
+      size:function(){
+        return this.items.length;
+      },
+      print:function(){
+        console.log(this.items.toString());
+      }
+    }
+
+    //=====================================2.2栈的使用===============================
+    var stack = new Stack();
+    console.log(stack.isEmpty());//true
+    stack.push(5);
+    stack.push(8);
+    console.log(stack.peek());//8
+    stack.push(11);
+    console.log(stack.size());//3
+    console.log(stack.isEmpty());
+    stack.push(15);
+    stack.pop();
+    stack.pop();
+    console.log(stack.size());//2
+    console.log(stack.print());//5,8
+
+    function divideBy2(decNumber){
+      var decStack = new Stack();
+      var rem;
+      var decString = '';
+      while(decNumber > 0){
+        rem = decNumber%2;
+        decStack.push(rem);
+        decNumber = Math.floor(decNumber/2);
+      }
+      while(!decStack.isEmpty()){
+        decString += decStack.pop().toString();
+      }
+      return decString;
+    }
+    console.log(divideBy2(10));//1010
+    
+	</script>
+</body>
+</html>
