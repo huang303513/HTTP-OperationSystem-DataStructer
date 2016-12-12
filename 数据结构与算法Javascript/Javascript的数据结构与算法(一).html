@@ -150,6 +150,93 @@
     }
     console.log(divideBy2(10));//1010
     
+    //====================================3.1队列的创建=============================
+    function Queue(){
+      this.items = [];
+    }
+    Queue.prototype = {
+      constructer:Queue,
+      enqueue:function(elements){
+        this.items.push(elements);
+      },
+      dequeue:function(){
+        return this.items.shift();
+      },
+      front:function(){
+        return this.items[0];
+      },
+      isEmpty:function(){
+        return this.items.length == 0;
+      },
+      size:function(){
+        return this.items.length;
+      },
+      clear:function(){
+        this.items = [];
+      },
+      print:function(){
+        console.log(this.items.toString());
+      }
+    }
+    var queue = new Queue();
+    console.log(queue.isEmpty());//true
+    queue.enqueue('huang');
+    queue.enqueue('cheng');
+    console.log(queue.print());//huang,cheng
+    console.log(queue.size());//2
+    console.log(queue.isEmpty());//false
+    queue.enqueue('du');
+    console.log(queue.dequeue());//huang
+    console.log(queue.print());//cheng,du
+
+    //================================3.2.1优先队列的定义====================================
+    function PriorityQueue(){
+      Queue.call(this);
+    };
+    PriorityQueue.prototype = new Queue();
+    PriorityQueue.prototype.constructer = PriorityQueue;
+    PriorityQueue.prototype.enqueue = function(element,priority){
+      function QueueElement(tempelement,temppriority){
+        this.element = tempelement;
+        this.priority = temppriority;
+      }
+      var queueElement = new QueueElement(element,priority);
+      //console.log(queueElement)
+      if(this.isEmpty()){
+        this.items.push(queueElement);
+      }else{
+        var added = false;
+        for(var i = 0; i < this.items.length;i++){
+          if(this.items[i].priority > queueElement.priority){
+            this.items.splice(i,0,queueElement);
+            added = true;
+            break;
+          }
+        }
+        if(!added){
+            this.items.push(queueElement);
+        }
+      }
+      
+    }
+    PriorityQueue.prototype.print = function(){
+      var result ='';
+      for(var i = 0; i < this.items.length;i++){
+        result += JSON.stringify(this.items[i]);
+        //console.log(item);
+      }
+      return result;
+    }
+
+    //================================3.2.1优先队列的基本使用======================================
+    var priorityQueue = new PriorityQueue();
+    priorityQueue.enqueue("cheng", 2);
+    priorityQueue.enqueue("du", 3);
+    priorityQueue.enqueue("huang", 1);
+    console.log(priorityQueue.print());//{"element":"huang","priority":1}{"element":"cheng","priority":2}{"element":"du","priority":3}
+    console.log(priorityQueue.size());//3
+    console.log(priorityQueue.dequeue());//{ element="huang",  priority=1}
+    console.log(priorityQueue.size());//2
 	</script>
 </body>
 </html>
