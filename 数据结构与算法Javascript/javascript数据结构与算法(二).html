@@ -145,8 +145,66 @@
     	setC.add(4);
     	console.log(setA.subset(setB)); //true
     	console.log(setA.subset(setC)); //false
-    	//==============================1.1集合的实现===========================
-    	//==============================1.1集合的实现===========================
+    	//==============================2.1.1字典的实现===========================
+    	function Dictionary() {
+    	    this.items = {};
+    	}
+    	Dictionary.prototype = {
+    	    constructor: Dictionary,
+    	    has: function(key) {
+    	        return key in this.items;
+    	    },
+    	    set: function(key, value) {
+    	        this.items[key] = value;
+    	    },
+    	    remove: function(key) {
+    	        if (this.has(key)) {
+    	            delete this.items[key];
+    	            return true;
+    	        }
+    	        return false;
+    	    },
+    	    get: function(key) {
+    	        return this.has(key) ? this.items[key] : undefined;
+    	    },
+    	    values: function() {
+    	        var values = [];
+    	        for (var key in this.items) {
+    	            if (this.has(key)) {
+    	                values.push(key);
+    	            }
+    	        }
+    	        return values;
+    	    },
+    	    clear: function() {
+    	        this.items = {};
+    	    },
+    	    size: function() {
+    	        return Object.keys(this.items).length;
+    	    },
+    	    keys: function() {
+    	        return Object.keys(this.items);
+    	    },
+    	    getItems: function() {
+    	        return this.items;
+    	    }
+    	};
+    	//==============================2.1.2字典的基本使用===========================
+    	var dictionary = new Dictionary();
+    	console.log(dictionary.size()); //0
+    	dictionary.set('first', 'huang');
+    	dictionary.set('second', 'cheng');
+    	dictionary.set('third', 'du');
+    	console.log(dictionary.has('first')); //true
+    	console.log(dictionary.get('second')); //cheng
+    	console.log(dictionary.values()); // ["first", "second", "third"]
+    	dictionary.remove('second');
+    	console.log(dictionary.keys()); //["first", "third"]
+    	console.log(dictionary.getItems()); //{ first="huang",  third="du"}
+
+
+    	
+
     	//==============================1.1集合的实现===========================
     </script>
     </body>
