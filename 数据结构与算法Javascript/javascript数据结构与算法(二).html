@@ -324,15 +324,90 @@
     	console.log(hash.get('Gandalf')); //undefined
 
     	//==============================2.2.3线性探查版散列表===========================
+    	function HashTable() {
+    	    this.table = []; //lose-los散列函数 
+    	    function loseloseHashCode(key) {
+    	        var hash = 0;
+    	        for (var i = 0; i < key.length; i++) {
+    	            hash += key.charCodeAt(i);
+    	        }
+    	        //console.log(key + " - " + (hash % 37));
+    	        return hash % 37;
+    	    }
 
-
-
-
-
-
-
-
-
+    	    function ValuePair(key, value) {
+    	        this.key = key;
+    	        this.value = value;
+    	        this.toString = function() {
+    	            return '[' + this.key + ' - ' + this.value + ']';
+    	        }
+    	    }
+    	    if ((typeof this.put !== 'function') && (typeof this.put !== 'string')) {
+    	        HashTable.prototype.put = function(key, value) {
+    	            var position = loseloseHashCode(key);
+    	            if (this.table[position] === undefined) {
+    	                this.table[position] = new ValuePair(key, value);
+    	            } else {
+    	                var index = position + 1;
+    	                while (this.table[index] !== undefined) {
+    	                    index++;
+    	                }
+    	                this.table[index] = new ValuePair(key, value);
+    	            }
+    	        };
+    	        HashTable.prototype.get = function(key) {
+    	            var position = loseloseHashCode(key);
+    	            if (this.table[position] !== undefined) {
+    	                if (this.table[position].key === key) {
+    	                    return this.table[position].value;
+    	                } else {
+    	                    var index = position + 1;
+    	                    //index不超过数组的长度
+    	                    while (((this.table[index] === undefined) || (this.table[index].key !== key)) && (index < this.table.length)) {
+    	                        index++;
+    	                    }
+    	                    if (this.table[index] && (this.table[index].key === key)) {
+    	                        return this.table[index].value;
+    	                    } else {
+    	                        return undefined;
+    	                    }
+    	                }
+    	            } else {
+    	                return undefined;
+    	            }
+    	        };
+    	        HashTable.prototype.remove = function(key) {
+    	            var position = loseloseHashCode(key);
+    	            if (this.table[position] !== undefined) {
+    	                if (this.table[position].key === key) {
+    	                    this.table[position] = undefined;
+    	                    return true;
+    	                } else {
+    	                    var index = position + 1;
+    	                    while ((this.table[index] === undefined) || (this.table[index].key !== key)) {
+    	                        index++;
+    	                    }
+    	                    if (this.table[index].key === key) {
+    	                        this.table[index] = undefined;
+    	                        return true;
+    	                    }
+    	                }
+    	            } else {
+    	                return false;
+    	            }
+    	        };
+    	    }
+    	}
+    	var hash = new HashTable();
+    	hash.put('Gandalf', 'gandalf@email.com');
+    	hash.put('John', 'johnsnow@email.com');
+    	//下面两个hash值相同
+    	hash.put('Aaron', 'huang@gmail.com');
+    	hash.put('Tyrion', 'tyrion@email.com');
+    	console.log(hash.get('Gandalf')); //gandalf@email.com
+    	console.log(hash.get('Loiane')); //undefined
+    	console.log(hash.remove('Gandalf')); //true
+    	console.log(hash.get('Gandalf')); //undefined
 
     </script>
     </body>
