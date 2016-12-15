@@ -155,7 +155,7 @@
       this.items = [];
     }
     Queue.prototype = {
-      constructer:Queue,
+      constructor:Queue,
       enqueue:function(elements){
         this.items.push(elements);
       },
@@ -194,7 +194,7 @@
       Queue.call(this);
     };
     PriorityQueue.prototype = new Queue();
-    PriorityQueue.prototype.constructer = PriorityQueue;
+    PriorityQueue.prototype.constructor = PriorityQueue;
     PriorityQueue.prototype.enqueue = function(element,priority){
       function QueueElement(tempelement,temppriority){
         this.element = tempelement;

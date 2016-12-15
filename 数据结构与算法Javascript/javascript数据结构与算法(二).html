@@ -6,7 +6,148 @@
     </head>
     <body>
     <script type="text/javascript">
-    	
+    	//==============================1.1集合的实现===========================
+    	function Set() {
+    	    this.items = {};
+    	}
+    	Set.prototype = {
+    	    constructor: Set,
+    	    has: function(value) {
+    	        return value in this.items;
+    	    },
+    	    add: function(value) {
+    	        if (!this.has(value)) {
+    	            this.items[value] = value;
+    	            return true;
+    	        }
+    	        return false;
+    	    },
+    	    remove: function(value) {
+    	        if (this.has(value)) {
+    	            delete this.items[value];
+    	            return true;
+    	        }
+    	        return false;
+    	    },
+    	    clear: function() {
+    	        this.items = {};
+    	    },
+    	    size: function() {
+    	        return Object.keys(this.items).length;
+    	    },
+    	    values: function() {
+    	        return Object.keys(this.items);
+    	    },
+    	    union: function(otherSet) {
+    	        var unionSet = new Set();
+    	        var values = this.values();
+    	        for (var i = 0; i < values.length; i++) {
+    	            unionSet.add(values[i]);
+    	        }
+    	        values = otherSet.values();
+    	        for (var i = 0; i < values.length; i++) {
+    	            unionSet.add(values[i]);
+    	        }
+    	        return unionSet;
+    	    },
+    	    intersection: function(otherSet) {
+    	        var intersectionSet = new Set();
+    	        var values = this.values();
+    	        for (var i = 0; i < values.length; i++) {
+    	            if (otherSet.has(values[i])) {
+    	                intersectionSet.add(values[i]);
+    	            }
+    	        }
+    	        return intersectionSet;
+    	    },
+    	    difference: function(otherSet) {
+    	        var differenceSet = new Set();
+    	        var values = this.values();
+    	        for (var i = 0; i < values.length; i++) {
+    	            if (!otherSet.has(values[i])) {
+    	                differenceSet.add(values[i]);
+    	            }
+    	        }
+    	        return differenceSet;
+    	    },
+    	    subset: function(otherSet) {
+    	        if (this.size() > otherSet.size()) {
+    	            return false;
+    	        } else {
+    	            var values = this.values();
+    	            for (var i = 0; i < values.length; i++) {
+    	                if (!otherSet.has(values[i])) {
+    	                    return false;
+    	                }
+    	            }
+    	        }
+    	        return true;
+    	    },
+    	};
+    	//==============================1.2集合的使用===========================
+    	var set = new Set();
+    	set.add(1);
+    	console.log(set.values());//["1"]
+    	console.log(set.has(1));//true
+    	console.log(set.size());//1
+    	set.add(2);
+    	console.log(set.values());//["1","2"]
+    	console.log(set.has(2));//true
+    	console.log(set.size());//2
+    	set.remove(2);
+    	console.log(set.values());//["1"]
+
+    	//并集测试
+    	var setA = new Set();
+    	setA.add(1);
+    	setA.add(2);
+    	setA.add(3);
+    	var setB = new Set();
+    	setB.add(3);
+    	setB.add(4);
+    	setB.add(5);
+    	setB.add(6);
+    	var setAB = setA.union(setB);
+    	console.log(setAB.values()); // ["1", "2", "3", "4", "5", "6"]
+    	//交集测试
+    	setA = new Set();
+    	setA.add(1);
+    	setA.add(2);
+    	setA.add(3);
+    	setB = new Set();
+    	setB.add(2);
+    	setB.add(3);
+    	setB.add(4);
+    	var intersectionAB = setA.intersection(setB);
+    	console.log(intersectionAB.values()); // ["2", "3"]
+    	//差集侧事故
+    	setA = new Set();
+    	setA.add(1);
+    	setA.add(2);
+    	setA.add(3);
+    	setB = new Set();
+    	setB.add(2);
+    	setB.add(3);
+    	setB.add(4);
+    	var differenceAB = setA.difference(setB);
+    	console.log(differenceAB.values()); //["1"]
+    	//子集测试
+    	setA = new Set();
+    	setA.add(1);
+    	setA.add(2);
+    	var setB = new Set();
+    	setB.add(1);
+    	setB.add(2);
+    	setB.add(3);
+    	setC = new Set();
+    	setC.add(2);
+    	setC.add(3);
+    	setC.add(4);
+    	console.log(setA.subset(setB)); //true
+    	console.log(setA.subset(setC)); //false
+    	//==============================1.1集合的实现===========================
+    	//==============================1.1集合的实现===========================
+    	//==============================1.1集合的实现===========================
     </script>
     </body>
 </html>
