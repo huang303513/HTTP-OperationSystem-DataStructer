@@ -302,6 +302,7 @@
               }
               previous.next = current.next;
             }
+            this.length--;
             return current.element;
           }else{
             return null;
@@ -341,7 +342,7 @@
             return string;
         };
         LinkedList.prototype.getHead = function(){
-          return head;
+          return this.head;
         };
       }
     }

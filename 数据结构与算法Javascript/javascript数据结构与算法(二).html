@@ -202,10 +202,138 @@
     	console.log(dictionary.keys()); //["first", "third"]
     	console.log(dictionary.getItems()); //{ first="huang",  third="du"}
 
+    	//==============================2.2.1基本版的散列表实现===========================
+    	//lose-los散列函数
+    	function loseloseHashCode(key) {
+    	    var hash = 0;
+    	    for (var i = 0; i < key.length; i++) {
+    	        hash += key.charCodeAt(i);
+    	    }
+    	    return hash % 37;
+    	}
 
-    	
+    	function HashTable() {
+    	    this.table = [];
+    	}
+    	HashTable.prototype = {
+    	    constructor: HashTable,
+    	    put: function(key, value) {
+    	        var position = loseloseHashCode(key);
+    	        console.log(position + '- ' + key);
+    	        this.table[position] = value;
+    	    },
+    	    get: function(key) {
+    	        return this.table[loseloseHashCode(key)];
+    	    },
+    	    remove: function(key) {
+    	        this.table[loseloseHashCode(key)] = undefined;
+    	    }
+    	};
 
-    	//==============================1.1集合的实现===========================
+    	var hash = new HashTable();
+    	hash.put('Gandalf', 'gandalf@email.com');
+    	hash.put('John', 'johnsnow@email.com');
+    	hash.put('Tyrion', 'tyrion@email.com');
+    	console.log(hash.get('Gandalf')); //gandalf@email.com
+    	console.log(hash.get('Loiane')); //undefined
+    	hash.remove('Gandalf');
+    	console.log(hash.get('Gandalf')); //undefined
+
+    	//==============================2.2.2分离链接版散列表===========================
+    	function HashTable() {
+    	    this.table = []; 
+    	    //lose-los散列函数 
+    	    function loseloseHashCode(key) {
+    	        var hash = 0;
+    	        for (var i = 0; i < key.length; i++) {
+    	            hash += key.charCodeAt(i);
+    	        }
+    	        //console.log(key + " - " + (hash % 37));
+    	        return hash % 37;
+    	    }
+
+    	    function ValuePair(key, value) {
+    	        this.key = key;
+    	        this.value = value;
+    	        this.toString = function() {
+    	            return '[' + this.key + ' - ' + this.value + ']';
+    	        }
+    	    }
+    	    if ((typeof this.put !== 'function') && (typeof this.put !== 'string')) {
+    	        HashTable.prototype.put = function(key, value) {
+    	            var position = loseloseHashCode(key);
+    	            if (this.table[position] === undefined) {
+    	                this.table[position] = new LinkedList();
+    	            }
+    	            this.table[position].append(new ValuePair(key, value));
+    	        };
+    	        HashTable.prototype.get = function(key) {
+    	            var position = loseloseHashCode(key);
+    	            if (this.table[position] !== undefined) {
+    	                var current = this.table[position].getHead();
+    	                while (current.next) {
+    	                    if (current.element.key === key) {
+    	                        return current.element.value;
+    	                    }
+    	                    current = current.next;
+    	                }
+    	                //第一个元素或者最后一个元素
+    	                if (current.element.key === key) {
+    	                    return current.element.value;
+    	                }
+    	            } else {
+    	                return undefined;
+    	            }
+    	        };
+    	        HashTable.prototype.remove = function(key) {
+    	            var position = loseloseHashCode(key);
+    	            if (this.table[position] !== undefined) {
+    	                var current = this.table[position].getHead();
+    	                while (current.next) {
+    	                    if (current.element.key === key) {
+    	                        this.table[position].remove(current.element);
+    	                        if (this.table[position].isEmpty()) {
+    	                            this.table[position] = undefined;
+    	                        }
+    	                        return true;
+    	                    }
+    	                    current = current.next;
+    	                }
+    	                //检查是否是第一个或者最后一个
+    	                if (current.element.key === key) {
+    	                    this.table[position].remove(current.element);
+    	                    if (this.table[position].isEmpty()) {
+    	                        this.table[position] = undefined;
+    	                    }
+    	                    return true;
+    	                }
+    	            }
+    	            return false;
+    	        };
+    	    }
+    	}
+    	var hash = new HashTable();
+    	hash.put('Gandalf', 'gandalf@email.com');
+    	hash.put('John', 'johnsnow@email.com');
+    	//下面两个hash值相同
+    	hash.put('Aaron', 'huang@gmail.com');
+    	hash.put('Tyrion', 'tyrion@email.com');
+    	console.log(hash.get('Gandalf')); //gandalf@email.com
+    	console.log(hash.get('Loiane')); //undefined
+    	hash.remove('Gandalf');
+    	console.log(hash.get('Gandalf')); //undefined
+
+    	//==============================2.2.3线性探查版散列表===========================
+
+
+
+
+
+
+
+
+
+
     </script>
     </body>
 </html>
