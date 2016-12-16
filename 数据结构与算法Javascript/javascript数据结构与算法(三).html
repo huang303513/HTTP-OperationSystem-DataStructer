@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>javascript数据结构与算法(二)</title>
+    <meta charset="utf-8">
+</head>
+
+<body>
+    <script type="text/javascript">
+    //==============================1.1.2 二叉搜索树的实现与基本使用===========================
+    function BinarySearchTree() {
+        function Node(key) {
+            this.key = key;
+            this.left = null;
+            this.right = null;
+        }
+        this.root = null;
+        if ((typeof this.insert !== 'function') && (typeof this.insert !== 'string')) {
+            //内部私有方法，用于插入节点
+            function insertNode(node, newNode) {
+                if (node.key > newNode.key) {
+                    if (node.left === null) {
+                        node.left = newNode;
+                    } else {
+                        insertNode(node.left, newNode);
+                    }
+                } else {
+                    if (node.right === null) {
+                        node.right = newNode;
+                    } else {
+                        insertNode(node.right, newNode);
+                    }
+                }
+            }
+            BinarySearchTree.prototype.insert = function(key) {
+                var newNode = new Node(key);
+                if (this.root === null) {
+                    this.root = newNode;
+                } else {
+                    insertNode(this.root, newNode);
+                }
+            };
+            BinarySearchTree.prototype.inOrderTraverse = function(callback) {
+                //中序遍历的私有方法,从小到大遍历
+                function inOrderTraverseNode(node, callback) {
+                    if (node !== null) {
+                        inOrderTraverseNode(node.left, callback);
+                        callback(node.key);
+                        inOrderTraverseNode(node.right, callback);
+                    }
+                }
+                inOrderTraverseNode(this.root, printNode);
+            };
+            BinarySearchTree.prototype.preOrderTraverse = function(callback) {
+                function preOrderTraverseNode(node, callback) {
+                    if (node !== null) {
+                        callback(node.key);
+                        preOrderTraverseNode(node.left, callback);
+                        preOrderTraverseNode(node.right, callback);
+                    }
+                }
+                preOrderTraverseNode(this.root, callback);
+            };
+            BinarySearchTree.prototype.postOrderTraverse = function(callback) {
+                function postOrderTraverseNode(node, callback) {
+                    if (node !== null) {
+                        postOrderTraverseNode(node.left, callback);
+                        postOrderTraverseNode(node.right, callback);
+                        callback(node.key);
+                    }
+                }
+                postOrderTraverseNode(this.root, callback);
+            };
+            BinarySearchTree.prototype.min = function() {
+                function minNode(node) {
+                    if (node) {
+                        while (node && node.left !== null) {
+                            node = node.left;
+                        }
+                        return node.key;
+                    }
+                    return null;
+                }
+                //调用内部方法
+                return minNode(this.root);
+            };
+            BinarySearchTree.prototype.max = function() {
+                function maxNode(node) {
+                    if (node) {
+                        while (node && node.right !== null) {
+                            node = node.right;
+                        }
+                        return node.key;
+                    }
+                    return null;
+                }
+                //调用内部方法
+                return maxNode(this.root);
+            };
+            BinarySearchTree.prototype.search = function(key) {
+                function searchNode(node, key) {
+                    if (node === null) {
+                        return false;
+                    }
+                    if (node.key < key) {
+                        return searchNode(node.right, key);
+                    } else if (node.key > key) {
+                        return searchNode(node.left, key);
+                    } else {
+                        return true;
+                    }
+                }
+                return searchNode(this.root, key);
+            };
+            BinarySearchTree.prototype.remove = function(key) {
+                function findMinNode(node) {
+                    if (node) {
+                        while (node && node.left !== null) {
+                            node = node.left;
+                        }
+                        return node;
+                    }
+                    return null;
+                }
+
+                function removeNode(node, key) {
+                    if (node === null) {
+                        return null;
+                    }
+                    if (key < node.key) {
+                        node.left = removeNode(node.left, key);
+                        return node;
+                    } else if (key > node.key) {
+                        node.right = removeNode(node.right, key);
+                        return node;
+                    } else { //键等于node.key
+                        //第一种情况，一个叶节点
+                        if (node.left === null && node.right === null) {
+                            node = null;
+                            return node;
+                        }
+                        //第二种情况 一个只有一个子节点的节点
+                        if (node.left === null) {
+                            node = node.right;
+                            return node;
+                        } else if (node.right === null) {
+                            node = node.left;
+                            return node;
+                        }
+                        //第三种情况 一个有两个子节点的节点
+                        var aux = findMinNode(node.right);
+                        node.key = aux.key;
+                        node.right = removeNode(node.right, aux.key);
+                        return node;
+                    }
+                }
+                this.root = removeNode(this.root, key);
+            };
+        }
+    }
+
+    //==============================1.1.2 二叉搜索树的实现与基本使用===========================
+    //遍历节点操作
+    function printNode(value) {
+        console.log(value);
+    }
+    var tree = new BinarySearchTree();
+    tree.insert(11);
+    tree.insert(7);
+    tree.insert(15);
+    tree.insert(5);
+    tree.insert(3);
+    tree.insert(9);
+    tree.insert(8);
+    tree.insert(10);
+    tree.insert(13);
+    tree.insert(12);
+    tree.insert(14);
+    tree.insert(20);
+    tree.insert(18);
+    tree.insert(25);
+    tree.insert(6);
+    //中序遍历
+    tree.inOrderTraverse(printNode);//3 5 6 7 8 9 10 11 12 13 14 15 18 20 25
+    //先序遍历
+    tree.preOrderTraverse(printNode);//11 7 5 3 6 9 8 10 15 13 12 14 20 18 25
+    //后序遍历
+    tree.postOrderTraverse(printNode);//3 6 5 8 10 9 7 12 14 13 18 25 20 15 11
+    console.log(tree.min());
+    console.log(tree.max());
+    //搜索
+    console.log(tree.search(1) ? 'Key 1 found.' : 'Key 1 not found.');//Key 1 not found.
+    console.log(tree.search(8) ? 'Key 8 found.' : 'Key 8 not found.');//Key 8 found.
+    //移除节点
+    tree.remove(15);
+    tree.inOrderTraverse(printNode);////3 5 6 7 8 9 10 11 12 13 14 15 18 20 25
+    //console.log(tree.remove(100));
+
+
+    //==============================2.3.1图的广度优先搜索的基本实现===========================
+    //广度优先搜索算法 v表示初始节点，callback表示回调。
+    Graph.prototype.bfs = function(v, callback){
+        var color = initializeColor(this.vertices);
+        var queue = new Queue();//存储待访问和待探索的节点
+        queue.enqueue(v);
+        while(!queue.isEmpty()){
+            var u = queue.dequeue();
+            //获取u的相邻节点列表
+            var neighbors = this.adjList.get(u);
+            color[u] = 'grey';
+            for(var i = 0; i < neighbors.length; i++){
+                var w = neighbors[i];
+                //如果从没有标记过，则标记为grey，加入队列
+                if (color[w] === 'white') {
+                    color[w] = 'grey';
+                    queue.enqueue(w);
+                }
+            }
+            //所有相邻节点都被标记了，所以改为黑色
+            color[u] = 'black';
+            //如果对于标记过得节点有操作，通过callback操作
+            if (callback) {
+                callback(u);
+            }
+        }
+    };
+
+    //==============================2.4图的实现===========================
+
+
+    </script>
+</body>
+
+</html>
